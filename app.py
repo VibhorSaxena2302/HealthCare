@@ -22,11 +22,9 @@ def main():
     st.set_page_config(page_title="HealthCare", page_icon="🩺", layout="wide")
     st.title("HealthCare")
 
-    # Initialize session state variables
-    if 'logged_in' not in st.session_state:
-        st.session_state['logged_in'] = False
-    if 'user_id' not in st.session_state:
-        st.session_state['user_id'] = None
+    for key in ['logged_in', 'user_id', 'user_type', 'username']:
+        if key not in st.session_state:
+            st.session_state[key] = None if key != 'logged_in' else False
 
     # Sidebar menu
     st.sidebar.title("Menu")

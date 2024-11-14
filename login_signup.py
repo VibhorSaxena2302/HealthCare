@@ -15,7 +15,7 @@ from db_setup import UserType
 
 def signup():
     st.subheader("Create New Account")
-    user_type = st.selectbox("I am a:", ["Patient", "Doctor"])
+    user_type = st.selectbox("I am a:", ["User", "Doctor"])
     username = st.text_input("Username")
     password = st.text_input("Password", type='password')
     confirm_password = st.text_input("Confirm Password", type='password')
@@ -23,8 +23,9 @@ def signup():
     gender = st.selectbox("Gender", ["Male", "Female", "Other"])
     phone_number = st.text_input("Your WhatsApp Number (with country code, e.g., +1234567890)")
     
-    if user_type == "Patient":
+    if user_type == "User":
         # Basic fields
+        user_type = "Patient"
         height = st.number_input("Height (in cm)", min_value=0.0, format="%.2f")
         weight = st.number_input("Weight (in kg)", min_value=0.0, format="%.2f")
         goal = st.text_input("Goal (e.g., Lose weight, Gain muscle)")
