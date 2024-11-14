@@ -3,7 +3,7 @@ from llm_model import llm
 import chroma
 
 chatbot = llm()
-chromadb_path = '/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/db'
+chromadb_path = r'C:\Users\shrey\Git Uploads\HealthCare\LLM\db'
 
 def chatbot_page():
     st.subheader("Chat with our HealthCare Assistant")

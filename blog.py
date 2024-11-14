@@ -13,7 +13,7 @@ def setup_gcs_credentials(json_key_path):
     
 # Google Cloud Storage upload function
 def upload_to_gcs(image_file, bucket_name, blob_name):
-    json_key_path = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/uchat-431212-d06dd3414788.json"
+    json_key_path = r"C:\Users\shrey\Git Uploads\HealthCare\LLM\google_cloud_api\storage-441514-c40e275bbda9.json"
     setup_gcs_credentials(json_key_path)
 
     """Uploads a file to Google Cloud Storage and returns the public URL."""
@@ -73,12 +73,12 @@ def create_blog():
                 temp_dir = tempfile.mkdtemp()
                 image_path = os.path.join(temp_dir, uploaded_image.name)
                 
-                # Save the image file locally
+                # Save the image file locally 
                 with open(image_path, "wb") as f:
                     f.write(uploaded_image.getbuffer())
                 
                 # Upload image to GCS
-                bucket_name = "gfgstorage"
+                bucket_name = "gfgstorage0"
                 blob_name = f"blog_images/{uploaded_image.name}"
                 image_url = upload_to_gcs(image_path, bucket_name, blob_name)
                 
