@@ -1,5 +1,5 @@
 import streamlit as st
-import blog, login_signup, chatbot, userprofile, personalized_plan, dashboard, schedules, depression, empathAI, iesr, ptsd, doctor_profile, doctor_patients
+import blog, login_signup, chatbot, userprofile, DiaryEntry, personalized_plan, dashboard, schedules, depression, empathAI, iesr, ptsd, doctor_profile, doctor_patients
 import streamlit.components.v1 as components 
 
 def open_external_link(url):
@@ -36,7 +36,7 @@ def main():
 
         if user_type == 'patient':
             # Logged-in menu
-            menu = ["Profile", "Dashboard", "Doctors", "Personalized Plan", "Schedules", "Create Blog", "View Blogs", "Health Guru", "GrandmaBot","CBT_Depression", "CBT_IES-R", "CBT_PTSD", "Open Workout Assistant", "Logout"]
+            menu = ["Profile", "Dashboard", "Doctors", "Personalized Plan", "Schedules", "Create Blog", "View Blogs", "Health Guru", "GrandmaBot", "Dear Diary", "CBT_Depression", "CBT_IES-R", "CBT_PTSD", "Open Workout Assistant", "Logout"]
             choice = st.sidebar.radio("Navigation", menu, key='logged_in_menu')
 
             if choice == "Profile":
@@ -57,6 +57,8 @@ def main():
                 chatbot.chatbot_page()
             elif choice == "GrandmaBot":
                 empathAI.page()
+            elif choice == "Dear Diary":
+                DiaryEntry.diary_app()
             elif choice == "CBT_Depression":
                 depression.page()
             elif choice == "CBT_IES-R":
