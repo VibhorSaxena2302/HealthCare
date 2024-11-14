@@ -5,7 +5,6 @@ from twilio.rest import Client
 from datetime import datetime, timedelta
 import os
 
-# Twilio credentials (replace with your own or set as environment variables)
 TWILIO_ACCOUNT_SID = 'AC2b0ca5563a2625a8e35161b8512f75df'
 TWILIO_AUTH_TOKEN = 'fdb60fdbac1c6ee89b01eda0f4b18a06'
 TWILIO_WHATSAPP_NUMBER = 'whatsapp:+14155238886'

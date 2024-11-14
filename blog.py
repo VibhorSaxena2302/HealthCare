@@ -1,6 +1,7 @@
 from db_setup import BlogPost, Comment, SessionLocal
 import streamlit as st
 from google.cloud import storage
+from google.oauth2 import service_account
 import os
 import tempfile
 from PIL import Image
@@ -10,10 +11,14 @@ def setup_gcs_credentials(json_key_path):
     # Set GOOGLE_APPLICATION_CREDENTIALS environment variable
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = json_key_path
     print(f"Environment variable set for credentials: {json_key_path}")
+
+    credentials = service_account.Credentials.from_service_account_file(json_key_path)
+    service_account_email = credentials.service_account_email
+    print(f"Service Account Email: {service_account_email}")
     
 # Google Cloud Storage upload function
 def upload_to_gcs(image_file, bucket_name, blob_name):
-    json_key_path = r"C:\Users\shrey\Git Uploads\HealthCare\LLM\google_cloud_api\storage-441514-c40e275bbda9.json"
+    json_key_path = r"C:\Users\shrey\Git Uploads\HealthCare2\HealthCare\google_cloud_api\storage-441514-c40e275bbda9.json"
     setup_gcs_credentials(json_key_path)
 
     """Uploads a file to Google Cloud Storage and returns the public URL."""
@@ -28,7 +33,7 @@ def upload_to_gcs(image_file, bucket_name, blob_name):
 
 # Function to download the image from GCS to a temp directory
 def download_image_from_gcs(image_url, temp_dir, max_width=300, max_height=300):
-    json_key_path = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/uchat-431212-d06dd3414788.json"
+    json_key_path = r"C:\Users\shrey\Git Uploads\HealthCare2\HealthCare\google_cloud_api\storage-441514-c40e275bbda9.json"
     setup_gcs_credentials(json_key_path)
     """Download the image from GCS and save it to a temp directory."""
     storage_client = storage.Client()
@@ -73,7 +78,7 @@ def create_blog():
                 temp_dir = tempfile.mkdtemp()
                 image_path = os.path.join(temp_dir, uploaded_image.name)
                 
-                # Save the image file locally 
+                # Save the image file locally
                 with open(image_path, "wb") as f:
                     f.write(uploaded_image.getbuffer())
                 

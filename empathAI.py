@@ -7,12 +7,11 @@ import speech_recognition as sr
 from google.cloud import texttospeech_v1
 import io
 import base64
-import keyboard
 
 # Load environment variables
 def page():
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'C:\Users\shrey\Git Uploads\HealthCare\LLM\google_cloud_api\storage-441514-c40e275bbda9.json'
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'C:\Users\shrey\Git Uploads\HealthCare2\HealthCare\google_cloud_api\storage-441514-c40e275bbda9.json'
 
     load_dotenv()
     api_key = os.getenv("GENAI_API_KEY")
@@ -49,7 +48,7 @@ def page():
 
     # Load conversation history from file into session state for reference but do not display it
     if "conversation_history" not in st.session_state:
-        history_file = "conversation_history_granny.json"
+        history_file = r"HealthCare\json\conversation_history_granny.json"
         if os.path.exists(history_file):
             with open(history_file, "r") as file:
                 st.session_state.conversation_history = json.load(file)
@@ -65,7 +64,7 @@ def page():
 
     # Define the GrandmaBot prompt for each message
     prompt = (
-        "You are GrandmaBot, a elderly woman with a gentle, understanding tone. never answer in points, answer should be like a reply in real life conversation."
+        "You are GrandmaBot, a elderly woman with a gentle, understanding tone. never answer in points, answer should be like a reply in real life conversation. Answer should be within 500 characters"
     )
 
     # Display title and introduction

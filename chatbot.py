@@ -3,10 +3,10 @@ from llm_model import llm
 import chroma
 
 chatbot = llm()
-chromadb_path = r'C:\Users\shrey\Git Uploads\HealthCare\LLM\db'
+chromadb_path = r'C:\Users\shrey\Git Uploads\HealthCare2\HealthCare\LLM\db'
 
 def chatbot_page():
-    st.subheader("Chat with our HealthCare Assistant")
+    st.subheader("Chat with our Health Guru")
 
     # Persisting the chat history in the session state
     if "messages" not in st.session_state:

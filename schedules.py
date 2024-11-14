@@ -13,6 +13,10 @@ def schedules_page():
         st.warning("You need to log in to view this page.")
         return
 
+    if st.session_state.get('user_type') != 'patient':
+        st.warning("Only patients can access this page.")
+        return
+
     with SessionLocal() as db:
         user_id = st.session_state['user_id']
         user = db.query(User).filter(User.id == user_id).first()
@@ -29,8 +33,8 @@ def schedules_page():
 
             label = st.text_input("Label (e.g., Take medicine, Do yoga)")
             schedule_date = st.date_input("Start Date", value=datetime.now().date())
-            times_input = st.text_input("Times (Enter times in HH:MM format, separated by commas, e.g., 09:00,12:00,17:00)")
-            phone_number = st.text_input("Your WhatsApp Number (with country code, e.g., +1234567890)")
+            times_input = st.text_input("Time (Enter time in HH:MM format, separated by commas, e.g., 09:00,12:00,17:00)")
+            phone_number = user.phone_number
             is_recurring = st.checkbox("Repeat every day at these times")
 
             if st.button("Add Schedule"):

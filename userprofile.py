@@ -1,6 +1,6 @@
 import streamlit as st
 from sqlalchemy.orm import Session
-from db_setup import User, UserHealthData, SessionLocal
+from db_setup import User, UserHealthData, SessionLocal, PatientDoctorAssociation, Appointment
 from datetime import datetime
 import math
 
@@ -20,6 +20,7 @@ def profile_page():
 
             # Existing fields
             username = st.text_input("Username", value=user.username, disabled=True)
+            phone_number = st.text_input("Phone Number", value=user.phone_number)
             height = st.number_input("Height (in cm)", min_value=0.0, value=user.height or 0.0, format="%.2f")
             weight = st.number_input("Weight (in kg)", min_value=0.0, value=user.weight or 0.0, format="%.2f")
             age = st.number_input("Age", min_value=0, value=user.age or 0, format="%d")
@@ -62,6 +63,7 @@ def profile_page():
                     bmr = None
 
                 # Update User data
+                user.phone_number = phone_number
                 user.height = height
                 user.weight = weight
                 user.age = age
@@ -89,3 +91,96 @@ def profile_page():
                 st.success("Profile and health data updated successfully!")
         else:
             st.error("User not found.")
+
+def manage_doctor_requests():
+    st.header("My Doctors and Appointments")
+
+    user_id = st.session_state['user_id']
+    with SessionLocal() as db:
+        # Fetch accepted doctor associations
+        accepted_associations = db.query(PatientDoctorAssociation).filter(
+            PatientDoctorAssociation.patient_id == user_id,
+            PatientDoctorAssociation.status == 'Accepted'
+        ).all()
+
+        if accepted_associations:
+            st.subheader("Your Associated Doctors and Appointments:")
+            for assoc in accepted_associations:
+                # Fetch doctor information
+                doctor = db.query(User).filter(User.id == assoc.doctor_id).first()
+                if doctor:
+                    st.write(f"**Dr. {doctor.username}**")
+                    st.write(f"Specialty: {doctor.specialty}")
+                    st.write(f"Phone Number: {doctor.phone_number}")
+                    st.write(f"Bio: {doctor.bio}")
+
+                    # Fetch upcoming appointments with this doctor
+                    appointments = db.query(Appointment).filter(
+                        Appointment.patient_id == user_id,
+                        Appointment.doctor_id == doctor.id,
+                        Appointment.schedule_datetime >= datetime.now()
+                    ).order_by(Appointment.schedule_datetime.asc()).all()
+
+                    if appointments:
+                        st.write(f"**Upcoming Appointments with Dr. {doctor.username}:**")
+                        for appt in appointments:
+                            st.write(f"- **Date and Time:** {appt.schedule_datetime.strftime('%Y-%m-%d %H:%M')}")
+                            st.write(f"  **Status:** {appt.status}")
+                            if appt.video_call_link:
+                                st.write(f"  **Video Call Link:** [Join Video Call]({appt.video_call_link})")
+                                if st.button(f"Join Video Call ({appt.schedule_datetime.strftime('%Y-%m-%d %H:%M')})", key=f"join_{appt.id}"):
+                                    open_external_link(appt.video_call_link)
+                            st.write("---")
+                    else:
+                        st.write(f"No upcoming appointments with Dr. {doctor.username}.")
+                        st.write("---")
+                else:
+                    st.error("Doctor not found.")
+        else:
+            st.info("You have no associated doctors.")
+
+        st.header("Doctor Requests")
+        # Fetch pending doctor requests
+        pending_associations = db.query(PatientDoctorAssociation).filter(
+            PatientDoctorAssociation.patient_id == user_id,
+            PatientDoctorAssociation.status == 'Pending'
+        ).all()
+        if pending_associations:
+            for assoc in pending_associations:
+                doctor = db.query(User).filter(User.id == assoc.doctor_id).first()
+                if doctor:
+                    st.write(f"Dr. {doctor.username} has requested to add you as a patient.")
+                    col1, col2 = st.columns(2)
+                    # Accept button
+                    with col1:
+                        if st.button(f"Accept Dr. {doctor.username}", key=f"accept_{assoc.id}"):
+                            assoc.status = 'Accepted'
+                            db.commit()
+                            st.success(f"You have accepted the request from Dr. {doctor.username}.")
+                    # Reject button
+                    with col2:
+                        if st.button(f"Reject Dr. {doctor.username}", key=f"reject_{assoc.id}"):
+                            # Delete the association upon rejection
+                            db.delete(assoc)
+                            db.commit()
+                            st.success(f"You have rejected the request from Dr. {doctor.username}.")
+                else:
+                    st.error("Doctor not found.")
+        else:
+            st.info("No pending doctor requests.")
+
+def open_external_link(url):
+    """
+    Opens the given URL in a new browser tab.
+    """
+    # Use Streamlit's components to open the link
+    import streamlit.components.v1 as components
+    components.html(
+        f"""
+        <script>
+        window.open("{url}", "_blank");
+        </script>
+        """,
+        height=0,
+        width=0
+    )
