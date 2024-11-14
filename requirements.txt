@@ -1,0 +1,17 @@
+google-cloud-storage
+APScheduler
+langchain
+cohere
+langchain_community
+Chroma
+chromadb
+langchain_huggingface
+langchain_chroma
+pypdf
+streamlit
+sqlalchemy
+psycopg2-binary
+pandas
+plotly
+bcrypt
+twillio
