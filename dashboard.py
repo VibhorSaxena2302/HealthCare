@@ -419,12 +419,12 @@ def streak_page():
 
         if steps_streak:
             steps_streak_obj = db.query(UserStreak).filter_by(user_id=user_id, streak_type='steps').first()
-            if steps_streak_obj.threshold:
+            if steps_streak_obj != None and steps_streak_obj.threshold:
                 streakval = steps_streak_obj.threshold
                 
-        if steps_streak:
+        if calories_streak:
             calories_streak_obj = db.query(UserStreak).filter_by(user_id=user_id, streak_type='calories').first()
-            if calories_streak_obj.threshold:
+            if calories_streak_obj != None and calories_streak_obj.threshold:
                 caloriesval = calories_streak_obj.threshold    
 
     # Allow user to set threshold values
