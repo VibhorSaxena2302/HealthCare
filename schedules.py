@@ -7,6 +7,18 @@ from datetime import datetime, timedelta, time
 import pandas as pd
 
 def schedules_page():
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0, .5)), to(rgba(255, 255, 255, 0.1))), url("https://i.pinimg.com/736x/86/86/a6/8686a6cc18f857fcef1b9a782bdc4d30.jpg");
+        background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+    
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.subheader("Your Schedules")
 
     if 'logged_in' not in st.session_state or not st.session_state['logged_in']:

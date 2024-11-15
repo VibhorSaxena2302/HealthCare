@@ -19,6 +19,46 @@ def page():
         
         return response.generations[0].text.strip()
 
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url(https://thumbs.dreamstime.com/z/mint-green-gradient-background-abstract-striped-background-light-mint-green-gradient-background-abstract-striped-background-189963480.jpg"); /* Path to your image */
+        background-size: cover; /* Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: 0% 30%; /* Centers the image */
+        }
+
+    .question-title {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    h1 {    
+        color: black;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;  
+    }
+
+    .custom-text {
+            color: black;
+            font-size: 2em;  /* Equivalent to h2 size */
+        }
+
+
+    .summary-box {
+        background-color: rgba(183,253,219, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        margin: auto;
+        width: 90%;
+        text-align: left;
+    }
+    
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.title("PCL-5")
     st.write("Post-traumatic Stress Disorder Checklist DSM-5 Version")
     st.write("Instructions: Here is a list of problems that people sometimes experience after a really stressful event. Please read each statement carefully and check the box to indicate how much this problem has affected you in the last month.")
@@ -218,29 +258,35 @@ def page():
 
     responses = []
     for i, question in enumerate(questions):
-        st.write("Question:", question["question"])
+    # Display the question inside the container using HTML to control layout
+        st.markdown(f'<div class="question-title">Question {i + 1}: {question["question"]}</div>', unsafe_allow_html=True)
+    
+        # Display the selectbox within the container
         response = st.selectbox(
-            "Your response:", [
-                option["option"] for option in question["options"]
-            ], key=f"q{i}"
+            "Your response:", 
+            [option["option"] for option in question["options"]],
+            key=f"q{i}"
         )
         responses.append(response)
+        st.write("\n")
 
-    score = calculate_score(responses)
+    # End the container for this question
+
+    total_score = calculate_score(responses)
         
     if st.button("Submit"):
             
-        st.write("Your total score is:", score)
-        if score >= 0 and score <= 20:
+        st.write("Your total score is:", total_score)
+        if total_score >= 0 and total_score <= 20:
             st.write("Your symptoms indicate low PTSD.")
-        elif score >= 21 and score <= 40:
+        elif total_score >= 21 and total_score <= 40:
             st.write("Your symptoms indicate moderate PTSD.")
         else:
             st.write("Your symptoms indicate severe PTSD.")
         
     if st.button("Generate Summary"):
-        summary = generate_summary("\n".join(responses), score)
+        summary = generate_summary("\n".join(responses), total_score)
                 
             # Display summary in Streamlit
-        st.write("### Summary of Patient's Mental Health")
-        st.write(summary)
+        st.markdown('<div class="custom-text"><b>### Summary of Patients Mental Health</b></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="summary-box"><b>{summary}</b></div>', unsafe_allow_html=True)

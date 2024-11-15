@@ -11,7 +11,19 @@ import base64
 # Load environment variables
 def page():
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json"
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255, .7)), to(rgba(0, 0, 0, 0.30))), url("https://i.pinimg.com/474x/54/f2/b3/54f2b3d4bbf33ee2afe399d7ad0d7fad.jpg");
+       background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
+
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r"C:\Users\banya\OneDrive\Desktop\health3.0\HealthCare\LLM\google_cloud_api\storage-441514-c40e275bbda9.json" 
     os.environ['GENAI_API_KEY'] = "AIzaSyAuV8NpDDi32rjEd_1FkiqMMYYkqEUevPw"
 
     load_dotenv()
@@ -49,7 +61,7 @@ def page():
 
     # Load conversation history from file into session state for reference but do not display it
     if "conversation_history" not in st.session_state:
-        history_file = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/empathic_chatbot/conversation_history_granny.json"
+        history_file = r"C:\Users\banya\OneDrive\Desktop\health3.0\HealthCare\LLM\empathic_chatbot\conversation_history_granny.json"
         if os.path.exists(history_file):
             with open(history_file, "r") as file:
                 st.session_state.conversation_history = json.load(file)
@@ -101,7 +113,7 @@ def page():
             st.error("Sorry, I could not understand the audio.")
         except sr.RequestError:
             st.error("Could not request results from Google Speech Recognition service.")
-
+    
     if st.button("Send") or user_input:
         if user_input:
             # Append user message to both the full conversation history and the displayed session conversation

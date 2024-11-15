@@ -3,10 +3,10 @@ from llm_model import llm
 import chroma
 
 chatbot = llm()
-chromadb_path = '/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/db'
+chromadb_path = r'C:\Users\banya\OneDrive\Desktop\health3.0\HealthCare\LLM\db'
 
 def chatbot_page():
-    st.subheader("Chat with our HealthCare Assistant")
+    st.subheader("Chat with our HealthGuru")
 
     # Persisting the chat history in the session state
     if "messages" not in st.session_state:
@@ -19,16 +19,27 @@ def chatbot_page():
     # Custom CSS for aligning messages and making chat container scrollable
     chat_style = """
     <style>
+    [data-testid="stApp"] {
+        background-image: url("https://img.freepik.com/free-vector/clean-medical-background_53876-116875.jpg"); /* Path to your image */
+        background-size: cover; /* Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+    }
+
+    .stAppHeader {
+        background-color: transparent !important;
+        box-shadow: none !important; /* Remove any shadow if present */
+}
     .chat-container {
         height: 400px;
         overflow-y: auto;
         padding: 10px;
-        background-color: #000000;
+        background-color: rgba(0,0,0, .85);
         border-radius: 5px;
     }
     .user-message {
         text-align: right;
-        background-color: #DCF8C6;
+        background-color: #C0F7E9;
         padding: 10px;
         border-radius: 10px;
         margin-bottom: 10px;

@@ -5,6 +5,18 @@ from datetime import datetime
 import math
 
 def view_doctors():
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url("https://i.pinimg.com/736x/86/86/a6/8686a6cc18f857fcef1b9a782bdc4d30.jpg"); /* Path to your image */
+        background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+    
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.header("Available Doctors")
 
     with SessionLocal() as db:
@@ -52,7 +64,7 @@ def profile_page():
                 hip_circumference = st.number_input("Hip Circumference (cm)", min_value=0.0, value=latest_health_data.hip_circumference or 0.0, format="%.2f")
             else:
                 hip_circumference = 0.0
-            muscle_mass = st.number_input("Muscle Mass (kg)", min_value=0.0, value=latest_health_data.muscle_mass or 0.0, format="%.2f")
+            muscle_mass = st.number_input("Muscle Mass (%)", min_value=0.0, value=latest_health_data.muscle_mass or 0.0, format="%.2f")
             bone_mass = st.number_input("Bone Mass (kg)", min_value=0.0, value=latest_health_data.bone_mass or 0.0, format="%.2f")
 
             if st.button("Update Profile"):
