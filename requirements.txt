@@ -14,7 +14,7 @@ psycopg2-binary
 pandas
 plotly
 bcrypt
-twillio
+twilio
 google-auth-oauthlib 
 google-auth-httplib2 
 google-api-python-client

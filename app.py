@@ -1,5 +1,6 @@
 import streamlit as st
-import blog, login_signup, chatbot, userprofile, personalized_plan, dashboard, schedules, depression, iesr, ptsd, doctor_profile, doctor_patients, diary_entry, empathAI
+import blog, login_signup, chatbot, userprofile, personalized_plan, dashboard, schedules, \
+depression, iesr, ptsd, doctor_profile, doctor_patients, diary_entry, empathAI, asmr
 import streamlit.components.v1 as components 
 
 def open_external_link(url):
@@ -34,7 +35,7 @@ def main():
 
         if user_type == 'patient':
             # Logged-in menu
-            menu = ["Profile", "Dashboard", "Doctors", "Personalized Plan", "Schedules", "Diary Entry", "Streak", "Create Blog", "View Blogs", "Chatbot", "EmpathicAI", "CBT_Depression", "CBT_IES-R", "CBT_PTSD", "Open Workout Assistant", "Logout"]
+            menu = ["Profile", "Dashboard", "Doctors", "Personalized Plan", "Schedules", "Diary Entry", "Streak", "Create Blog", "View Blogs", "Chatbot", "EmpathicAI", "CBT_Depression", "CBT_IES-R", "CBT_PTSD", "Open Workout Assistant", "ASMR", "Logout"]
             choice = st.sidebar.radio("Navigation", menu, key='logged_in_menu')
 
             if choice == "Profile":
@@ -67,6 +68,8 @@ def main():
                 ptsd.page()
             elif choice == "Open Workout Assistant":
                 open_external_link("http://localhost:8080/")
+            elif choice == "ASMR":
+                asmr.page()
             elif choice == "Logout":
                 st.session_state['logged_in'] = False
                 st.session_state['user_id'] = None

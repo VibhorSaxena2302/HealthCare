@@ -219,6 +219,7 @@ def view_patient_diary_entries(patient, db):
                 You are a certified mental health expert.
 
                 Your task is to analyze the following diary entry and provide a professional report that gives insights into the patient's emotional and mental well-being.
+                Do not provide any recommendations and suggestions.
 
                 **Diary Entry:**
                 {entry.body}
@@ -235,7 +236,6 @@ def view_patient_diary_entries(patient, db):
                 **Requirements:**
                 - Analyze the tone, mood, and emotions expressed in the entry.
                 - Identify any signs of stress, happiness, or other emotional states.
-                - Offer insights or suggestions that could be helpful for the patient's mental well-being based on the diary content.
                 - Keep the report professional, empathetic, and focused on helping the doctor understand the patient’s mental state.
 
                 Present the report in a clear and organized manner.

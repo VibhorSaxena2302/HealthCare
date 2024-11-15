@@ -11,7 +11,7 @@ import base64
 # Load environment variables
 def page():
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json"
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json" 
     os.environ['GENAI_API_KEY'] = "AIzaSyAuV8NpDDi32rjEd_1FkiqMMYYkqEUevPw"
 
     load_dotenv()
@@ -101,7 +101,7 @@ def page():
             st.error("Sorry, I could not understand the audio.")
         except sr.RequestError:
             st.error("Could not request results from Google Speech Recognition service.")
-
+    
     if st.button("Send") or user_input:
         if user_input:
             # Append user message to both the full conversation history and the displayed session conversation

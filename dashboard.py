@@ -1,5 +1,6 @@
+import math
 import streamlit as st
-from db_setup import UserHealthData, SessionLocal, UserStreak, UserStreakHistory
+from db_setup import UserHealthData, SessionLocal, UserStreak, UserStreakHistory, User
 import pandas as pd
 import plotly.express as px
 import googleapiclient.discovery
@@ -242,6 +243,7 @@ def dashboard_page():
             data = {
                 'Timestamp': [hd.timestamp for hd in health_data],
                 'Weight': [hd.weight for hd in health_data],
+                'Height': [hd.height for hd in health_data],
                 'BMI': [hd.bmi for hd in health_data],
                 'Body Fat': [hd.body_fat for hd in health_data],
                 'Muscle Mass': [hd.muscle_mass for hd in health_data],
@@ -290,6 +292,7 @@ def dashboard_page():
             service = googleapiclient.discovery.build('fitness', 'v1', credentials=st.session_state['credentials'])
             df_google_fit = collect_google_fit_data(service)
             st.write("### Your Google Fit Health Data")
+
             for df_key in df_google_fit.keys():
                 df_melted_fit = df_google_fit[df_key].melt('Timestamp', var_name='Metric', value_name='Value')
 
@@ -315,6 +318,73 @@ def dashboard_page():
                 st.write("#### Detailed Google Fit Health Data for", df_key)
                 df_google_fit[df_key] = df_google_fit[df_key].sort_values(by='Timestamp', ascending=False)
                 st.dataframe(df_google_fit[df_key].set_index('Timestamp'))
+            
+            gfit_weight_series = df_google_fit.get('Weight (kgs)', pd.DataFrame())
+            gfit_height_series = df_google_fit.get('Height (meters)', pd.DataFrame())
+
+            if not gfit_weight_series.empty and not gfit_height_series.empty:
+                with SessionLocal() as db:
+                    user = db.query(User).filter(User.id == st.session_state['user_id']).first()
+                    latest_health_data = db.query(UserHealthData).filter(UserHealthData.user_id == user.id).order_by(UserHealthData.timestamp.desc()).first()
+
+                    if user:
+                        latest_weight = float(format(float(gfit_weight_series['Weight (kgs)'].max()), ".2f"))
+                        latest_height = float(format(float(gfit_height_series['Height (meters)'].max()), ".2f"))
+
+                        if latest_weight > 0 and latest_height > 0 and latest_height!=latest_health_data.height and latest_weight!=latest_health_data.weight:
+                            # Convert height from meters to cm
+                            latest_height_cm = latest_height * 100
+
+                            # Update user's height and weight
+                            user.height = latest_height_cm
+                            user.weight = latest_weight
+
+                            # Recalculate BMI and Body Fat with updated values
+                            bmi = latest_weight / ((latest_height_cm / 100) ** 2)
+
+                            if user.gender == "Female":
+                                hip_circumference = st.number_input("Hip Circumference (cm)", min_value=0.0, value=latest_health_data.hip_circumference or 0.0, format="%.2f")
+                            else:
+                                hip_circumference = 0.0
+
+                            # Calculate Body Fat Percentage using U.S. Navy Method
+                            if user.gender == "Male" and latest_health_data.neck_circumference > 0 and latest_health_data.waist_circumference > 0 and latest_height_cm > 0:
+                                body_fat = 86.010 * math.log10(latest_health_data.waist_circumference - latest_health_data.neck_circumference) - 70.041 * math.log10(latest_height_cm) + 36.76
+                            elif user.gender == "Female" and latest_health_data.neck_circumference > 0 and latest_health_data.waist_circumference > 0 and hip_circumference > 0 and latest_height_cm > 0:
+                                body_fat = 163.205 * math.log10(latest_health_data.waist_circumference + hip_circumference - latest_health_data.neck_circumference) - 97.684 * math.log10(latest_height_cm) - 78.387
+                            else:
+                                body_fat = None
+
+                            # Calculate BMR using Mifflin-St Jeor Equation
+                            if latest_height_cm > 0 and latest_weight > 0 and user.age > 0:
+                                if user.gender == "Male":
+                                    bmr = 10 * latest_weight + 6.25 * latest_height_cm - 5 * user.age + 5
+                                elif user.gender == "Female":
+                                    bmr = 10 * latest_weight + 6.25 * latest_height_cm - 5 * user.age - 161
+                                else:
+                                    bmr = None
+                            else:
+                                bmr = None
+
+                            # Create new health data record with Google Fit data
+                            new_health_data = UserHealthData(
+                                user_id=user.id,
+                                height=latest_height_cm,
+                                weight=latest_weight,
+                                bmi=bmi,
+                                body_fat=body_fat,
+                                muscle_mass=latest_health_data.muscle_mass if latest_health_data.muscle_mass > 0 else None,
+                                bmr=bmr,
+                                bone_mass=latest_health_data.bone_mass if latest_health_data.bone_mass > 0 else None,
+                                neck_circumference=latest_health_data.neck_circumference if latest_health_data.neck_circumference > 0 else None,
+                                waist_circumference=latest_health_data.waist_circumference if latest_health_data.waist_circumference > 0 else None,
+                                hip_circumference=hip_circumference if hip_circumference > 0 else None,
+                                timestamp=datetime.datetime.utcnow()
+                            )
+                            db.add(new_health_data)
+                            db.commit()
+                            st.success("Profile updated with Google Fit data successfully!")
+
         except HttpError as error:
             st.error(f"An error occured: {error}")
     else:
