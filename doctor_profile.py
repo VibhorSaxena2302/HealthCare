@@ -13,6 +13,8 @@ def doctor_profile():
             st.write("**Phone Number:**", doctor.phone_number)
             st.write("**Age:**", doctor.age)
             st.write("**Gender:**", doctor.gender)
+            st.write("**Hospital:**", doctor.hospital)     
+            st.write("**Contact Email:**", doctor.contact_mail) 
             st.write("**Specialty:**", doctor.specialty)
             st.write("**Bio:**", doctor.bio)
 
@@ -21,6 +23,8 @@ def doctor_profile():
             age = st.number_input("Age", min_value=0, value=doctor.age or 0, format="%d")
             gender_options = ["Male", "Female", "Other"]
             gender = st.selectbox("Gender", gender_options, index=gender_options.index(doctor.gender) if doctor.gender else 0)
+            hospital = st.text_input("Hospital", value=doctor.hospital or "") 
+            contact_mail = st.text_input("Contact Email", value=doctor.contact_mail or "")  
             specialty = st.text_input("Specialty", value=doctor.specialty)
             bio = st.text_area("Bio", value=doctor.bio)
 
@@ -28,6 +32,8 @@ def doctor_profile():
                 doctor.phone_number = phone_number
                 doctor.age = age
                 doctor.gender = gender
+                doctor.hospital = hospital
+                doctor.contact_mail = contact_mail
                 doctor.specialty = specialty
                 doctor.bio = bio
                 db.commit()

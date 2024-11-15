@@ -36,9 +36,12 @@ class User(Base):
     #Doctor
     specialty = Column(String, nullable=True)
     bio = Column(Text, nullable=True)
+    hospital = Column(String, nullable=True) 
+    contact_mail = Column(String, nullable=True)
 
     health_data = relationship('UserHealthData', back_populates='user', cascade='all, delete-orphan')
     schedules = relationship('UserSchedule', back_populates='user', cascade='all, delete-orphan')
+    diary_entries = relationship('DiaryEntry', back_populates='user', cascade='all, delete-orphan')
 
     # Doctor-patient association
     patients = relationship(
@@ -106,6 +109,17 @@ class UserSchedule(Base):
 
     user = relationship('User', back_populates='schedules')
 
+class DiaryEntry(Base):
+    __tablename__ = 'diary_entries'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('gfg_users.id'))
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    body = Column(Text, nullable=False)
+    gratefulness = Column(String, nullable=True)  
+    visible_to_doctor = Column(Boolean, default=False) 
+
+    user = relationship('User', back_populates='diary_entries')
+
 # Define BlogPost table
 class BlogPost(Base):
     __tablename__ = 'gfg_blog_posts'
@@ -132,6 +146,25 @@ class Comment(Base):
     # Relationship to link the comment to its author and blog post
     author = relationship('User')
     post = relationship('BlogPost', back_populates='comments')
+
+class UserStreak(Base):
+    __tablename__ = 'user_streaks'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('gfg_users.id'))
+    streak_type = Column(String)  # 'steps' or 'calories'
+    threshold = Column(Integer)  # The threshold value set by the user
+    current_streak = Column(Integer, default=0)
+    last_updated = Column(DateTime)
+    user = relationship('User')
+
+class UserStreakHistory(Base):
+    __tablename__ = 'user_streak_history'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('gfg_users.id'))
+    streak_type = Column(String)  # 'steps' or 'calories'
+    date = Column(DateTime)
+    value = Column(Integer)  # Steps or calories burned
+    user = relationship('User')
 
 # Create the tables in the database
 Base.metadata.create_all(engine)

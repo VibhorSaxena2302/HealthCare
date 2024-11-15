@@ -1,8 +1,11 @@
 import streamlit as st
 from sqlalchemy.orm import Session
-from db_setup import User, UserSchedule, PatientDoctorAssociation, SessionLocal, UserType, Appointment
+from db_setup import User, UserSchedule, PatientDoctorAssociation, SessionLocal, UserType, Appointment, DiaryEntry
 from datetime import datetime
 import uuid
+from llm_model import llm
+
+chatbot = llm()
 
 def doctor_patients_page():
     st.header("Manage Patients")
@@ -40,6 +43,8 @@ def doctor_patients_page():
 
                 # Manage appointments with the selected patient
                 manage_patient_appointments(selected_patient, doctor_id, db)
+
+                view_patient_diary_entries(selected_patient, db)
             else:
                 st.info("You have no associated patients.")
 
@@ -191,3 +196,60 @@ def manage_patient_appointments(patient, doctor_id, db):
                 st.success(f"Appointment on {appt.schedule_datetime} canceled.")
     else:
         st.info(f"No upcoming appointments with {patient.username}.")
+
+def view_patient_diary_entries(patient, db):
+    st.subheader(f"Diary Entries for {patient.username}")
+
+    # Fetch visible diary entries
+    diary_entries = db.query(DiaryEntry).filter(
+        DiaryEntry.user_id == patient.id,
+        DiaryEntry.visible_to_doctor == True  # Only show entries marked as visible
+    ).order_by(DiaryEntry.timestamp.desc()).all()
+
+    if diary_entries:
+        for entry in diary_entries:
+            st.write(f"**Date:** {entry.timestamp.strftime('%Y-%m-%d %H:%M')}")
+            st.write(f"**Body:** {entry.body}")
+            st.write(f"**Gratefulness:** {entry.gratefulness}")
+
+            # Generate Report Button
+            if st.button("Generate Report", key=f"report_{entry.id}"):
+                # Compose prompt for generating report based on diary entry
+                prompt = f"""
+                You are a certified mental health expert.
+
+                Your task is to analyze the following diary entry and provide a professional report that gives insights into the patient's emotional and mental well-being.
+
+                **Diary Entry:**
+                {entry.body}
+
+                **Details of the Patient:**
+                - **Username**: {patient.username}
+                - **Age**: {patient.age if patient.age else 'N/A'}
+                - **Gender**: {patient.gender if patient.gender else 'N/A'}
+                - **Height:** {patient.height} cm
+                - **Weight:** {patient.weight} kg
+                - **Medical History:** {patient.medical_history}
+                - **Goal:** {patient.goal}
+                
+                **Requirements:**
+                - Analyze the tone, mood, and emotions expressed in the entry.
+                - Identify any signs of stress, happiness, or other emotional states.
+                - Offer insights or suggestions that could be helpful for the patient's mental well-being based on the diary content.
+                - Keep the report professional, empathetic, and focused on helping the doctor understand the patient’s mental state.
+
+                Present the report in a clear and organized manner.
+                """
+
+                # Generate the report using the LLM model
+                with st.spinner("Generating report..."):
+                    report = ""
+                    for chunk in chatbot.stream_generate(prompt=prompt, tokens=1000):
+                        report += chunk
+
+                # Display the generated report below the diary entry
+                st.subheader("Generated Report")
+                st.write(report)
+    else:
+        st.info(f"No diary entries from {patient.username} are visible to you.")
+

@@ -42,6 +42,8 @@ def signup():
         muscle_mass = st.number_input("Muscle Mass (kg)", min_value=0.0, format="%.2f")
         bone_mass = st.number_input("Bone Mass (kg)", min_value=0.0, format="%.2f")
     elif user_type == "Doctor":
+        hospital = st.text_input("Hospital")
+        contact_mail = st.text_input("Contact Email")
         specialty = st.text_input("Specialty")
         bio = st.text_area("Bio")
 
@@ -74,6 +76,8 @@ def signup():
                             password=password,
                             age=age,
                             gender=gender,
+                            hospital=hospital,
+                            contact_mail=contact_mail,
                             phone_number=phone_number,
                             user_type=UserType.doctor,
                             specialty=specialty,

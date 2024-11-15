@@ -1,8 +1,24 @@
 import streamlit as st
 from sqlalchemy.orm import Session
-from db_setup import User, UserHealthData, SessionLocal, PatientDoctorAssociation, Appointment
+from db_setup import User, UserHealthData, SessionLocal, PatientDoctorAssociation, Appointment, UserType
 from datetime import datetime
 import math
+
+def view_doctors():
+    st.header("Available Doctors")
+
+    with SessionLocal() as db:
+        doctors = db.query(User).filter(User.user_type == UserType.doctor).all()
+        if doctors:
+            for doctor in doctors:
+                st.subheader(f"Dr. {doctor.username}")
+                st.write(f"**Specialty:** {doctor.specialty}")
+                st.write(f"**Bio:** {doctor.bio}")
+                st.write(f"**Hospital:** {doctor.hospital or 'N/A'}")
+                st.write(f"**Contact Email:** {doctor.contact_mail or 'N/A'}")
+                st.write("---")
+        else:
+            st.info("No doctors found.")
 
 def profile_page():
     st.subheader("Your Profile")
@@ -168,6 +184,10 @@ def manage_doctor_requests():
                     st.error("Doctor not found.")
         else:
             st.info("No pending doctor requests.")
+    
+    st.write('---')
+
+    view_doctors()
 
 def open_external_link(url):
     """
