@@ -18,7 +18,7 @@ def setup_gcs_credentials(json_key_path):
     
 # Google Cloud Storage upload function
 def upload_to_gcs(image_file, bucket_name, blob_name):
-    json_key_path = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json"
+    json_key_path = "json_key_path"
     setup_gcs_credentials(json_key_path)
 
     """Uploads a file to Google Cloud Storage and returns the public URL."""
@@ -33,7 +33,7 @@ def upload_to_gcs(image_file, bucket_name, blob_name):
 
 # Function to download the image from GCS to a temp directory
 def download_image_from_gcs(image_url, temp_dir, max_width=300, max_height=300):
-    json_key_path = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json"
+    json_key_path = "json_key_path"
     setup_gcs_credentials(json_key_path)
     """Download the image from GCS and save it to a temp directory."""
     storage_client = storage.Client()

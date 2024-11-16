@@ -39,8 +39,8 @@ def get_user_credentials_fixed_port(scopes, client_id, client_secret, fixed_port
 
 def authenticate_user():
     credentials = get_user_credentials_fixed_port(
-        client_id="981259142195-vb5lfm4dogcg4qrl9gi83phhhh60dbls.apps.googleusercontent.com",
-        client_secret="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",
+        client_id="YOUR_CLIENT_ID",
+        client_secret="YOUR_CLIENT_SECRET",
         scopes=SCOPES,
     )
     st.session_state['credentials'] = credentials

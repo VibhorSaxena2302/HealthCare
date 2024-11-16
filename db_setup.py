@@ -6,7 +6,7 @@ from datetime import datetime
 from sqlalchemy import Enum
 import enum 
 
-DATABASE_URL = "postgresql://default:EuSoWVmj4f3M@ep-broad-wind-a1jdgsck-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&connect_timeout=15"
+DATABASE_URL = "DATABASE_URL"
 
 # Create the SQLAlchemy engine
 engine = create_engine(DATABASE_URL, pool_size=10, pool_pre_ping=True)

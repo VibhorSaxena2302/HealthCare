@@ -5,9 +5,9 @@ from twilio.rest import Client
 from datetime import datetime, timedelta
 import os
 
-TWILIO_ACCOUNT_SID = 'AC2b0ca5563a2625a8e35161b8512f75df'
-TWILIO_AUTH_TOKEN = 'fdb60fdbac1c6ee89b01eda0f4b18a06'
-TWILIO_WHATSAPP_NUMBER = 'whatsapp:+14155238886'
+TWILIO_ACCOUNT_SID = 'TWILIO_ACCOUNT_SID'
+TWILIO_AUTH_TOKEN = 'TWILIO_AUTH_TOKEN'
+TWILIO_WHATSAPP_NUMBER = 'TWILIO_WHATSAPP_NUMBER'
 
 def send_whatsapp_message(to_number, message_body):
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)

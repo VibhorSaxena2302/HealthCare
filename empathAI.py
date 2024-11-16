@@ -23,8 +23,8 @@ def page():
     """
     st.markdown(test_style, unsafe_allow_html=True)
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json"
-    os.environ['GENAI_API_KEY'] = "AIzaSyAuV8NpDDi32rjEd_1FkiqMMYYkqEUevPw"
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "YOUR_GOOGLE_APPLICATION_CREDENTIALS"
+    os.environ['GENAI_API_KEY'] = "YOUR_GENAI_API_KEY"
 
     load_dotenv()
     api_key = os.getenv("GENAI_API_KEY")

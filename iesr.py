@@ -3,7 +3,7 @@ import cohere
 
 def page():
     # Initialize Cohere API
-    cohere_client = cohere.Client('cYQPGLpHoYcpz74KloJi3NlyqRiSVtF6JkXvJUyY')  # Replace with your actual API key
+    cohere_client = cohere.Client('YOUR_COHERE_KEY')  # Replace with your actual API key
 
     # Function to generate summary
     def generate_summary(observations, score):
