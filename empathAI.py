@@ -11,7 +11,19 @@ import base64
 # Load environment variables
 def page():
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json" 
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255, .7)), to(rgba(0, 0, 0, 0.30))), url("https://i.pinimg.com/474x/54/f2/b3/54f2b3d4bbf33ee2afe399d7ad0d7fad.jpg");
+       background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
+
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/vibhor/Documents/Projects/gfg_hackathon/LLM/google_cloud_api/storage-441514-c40e275bbda9.json"
     os.environ['GENAI_API_KEY'] = "AIzaSyAuV8NpDDi32rjEd_1FkiqMMYYkqEUevPw"
 
     load_dotenv()

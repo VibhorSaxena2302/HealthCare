@@ -32,6 +32,18 @@ prompts = [
 ]
 
 def diary_entry_page():
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url("https://i.pinimg.com/474x/4b/61/72/4b6172a722aeabf855c9cf74b90f7746.jpg"); /* Path to your image */
+        background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+    
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.title("My Diary")
 
     if 'logged_in' not in st.session_state or not st.session_state['logged_in']:

@@ -9,6 +9,18 @@ import math
 chatbot = llm()
 
 def personalized_plan_page():
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url("https://i.pinimg.com/736x/86/86/a6/8686a6cc18f857fcef1b9a782bdc4d30.jpg"); /* Path to your image */
+        background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+    }
+    
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.subheader("Get Your Personalized Plan")
 
     # Check if the user is logged in

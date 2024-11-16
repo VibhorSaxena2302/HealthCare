@@ -19,8 +19,45 @@ def page():
         
         return response.generations[0].text.strip()
 
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url("https://thumbs.dreamstime.com/z/mint-green-gradient-background-abstract-striped-background-light-mint-green-gradient-background-abstract-striped-background-189963480.jpg"); /* Path to your image */
+        background-size: cover;  /*Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+
+    h4 {    
+        color: black;
+        font-size: 4rem;
+        font-weight: bold;
+    }
+
+    .question-box {
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .custom-text {
+            color: black;
+            font-size: 2em;  /* Equivalent to h2 size */
+        }
+
+    .summary-box {
+        background-color: rgba(183,253,219, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        margin: auto;
+        width: 90%;
+        text-align: left;
+    }
+    
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.title("BDI-2 - Beck Depression Inventory")
-    st.write("The maximum score is 63")
 
     questions = [
         {
@@ -224,14 +261,14 @@ def page():
     total_score = 0
 
     for q in questions:
-        st.write(q["question"])
+        st.markdown('<div class="question-box"><br>', unsafe_allow_html=True)
+        st.markdown(f'<div class="custom-text"><b>{q["question"]}</b></div>', unsafe_allow_html=True)
         selected_option = st.radio("Select an option:", [opt["option"] for opt in q["options"]], key=q["question"])
-        
-        # Get weight of selected option
         for opt in q["options"]:
             if opt["option"] == selected_option:
                 total_score += opt["weight"]
                 observations.append(f"{q['question']}: {selected_option}")
+        st.markdown('</br></div>', unsafe_allow_html=True)
 
     if st.button("Calculate Score"):
         st.write(f"Your total score is: {total_score}")
@@ -250,5 +287,6 @@ def page():
         summary = generate_summary("\n".join(observations), total_score)
         
         # Display summary in Streamlit
+        
         st.write("### Summary of Patient's Mental Health")
-        st.write(summary)
+        st.markdown(f'<div class="summary-box"><b>{summary}</b></div>', unsafe_allow_html=True)

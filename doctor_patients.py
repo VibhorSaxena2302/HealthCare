@@ -252,4 +252,3 @@ def view_patient_diary_entries(patient, db):
                 st.write(report)
     else:
         st.info(f"No diary entries from {patient.username} are visible to you.")
-

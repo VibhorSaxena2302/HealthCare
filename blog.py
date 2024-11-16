@@ -62,6 +62,17 @@ def download_image_from_gcs(image_url, temp_dir, max_width=300, max_height=300):
     return resized_image_path
 
 def create_blog():
+    cBlog_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url("https://img.freepik.com/free-vector/clean-medical-background_53876-116875.jpg"); /* Path to your image */
+        background-size: cover; /* Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+
+        </style>"""
+    st.markdown(cBlog_style, unsafe_allow_html=True)
     if 'logged_in' in st.session_state and st.session_state['logged_in']:
         st.subheader("Create New Blog Post")
         title = st.text_input("Title")
@@ -114,6 +125,18 @@ def like_post(post_id):
         db.commit()
 
 def view_blogs():
+    test_style = """
+    <style>
+    [data-testid="stApp"] {
+        background-image: url("https://img.freepik.com/free-vector/clean-medical-background_53876-116875.jpg"); /* Path to your image */
+        background-size: cover; /* Scales the image to cover the entire background */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image */
+        }
+
+    </style>
+    """
+    st.markdown(test_style, unsafe_allow_html=True)
     st.subheader("Blog Posts")
 
     if 'page' not in st.session_state:
@@ -202,5 +225,4 @@ def view_blogs():
 
         if os.path.exists(temp_dir):
             utility.rm_directory(temp_dir)
-
 
