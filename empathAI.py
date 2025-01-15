@@ -24,7 +24,7 @@ def page():
     st.markdown(test_style, unsafe_allow_html=True)
 
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r"C:\Users\banya\OneDrive\Desktop\health3.0\HealthCare\LLM\google_cloud_api\storage-441514-c40e275bbda9.json" 
-    os.environ['GENAI_API_KEY'] = "AIzaSyAuV8NpDDi32rjEd_1FkiqMMYYkqEUevPw"
+    os.environ['GENAI_API_KEY'] = "Your_API_Key"
 
     load_dotenv()
     api_key = os.getenv("GENAI_API_KEY")
